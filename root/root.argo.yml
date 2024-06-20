@@ -7,8 +7,10 @@ spec:
   project: default
   source:
     repoURL: https://github.com/LukMayr/k8s/
-    path: root
+    path: .
     targetRevision: HEAD
+    directory:
+      exclude: root
   destination:
     server: "https://kubernetes.default.svc"
     namespace: default
