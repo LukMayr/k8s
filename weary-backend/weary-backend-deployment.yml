@@ -17,8 +17,8 @@ spec:
         - name: weary-backend
           image: ghcr.io/wearyclothing/weary-backend:latest
           imagePullPolicy: Always
-        imagePullSecrets:
-          - dockerconfigjson-github-com
+      imagePullSecrets:
+        - name: dockerconfigjson-github-com
 ---
 apiVersion: v1
 kind: Service
@@ -40,10 +40,10 @@ metadata:
   name: weary-backend
   namespace: weary-backend
   annotations:
-    spec.ingressClassName: traefik
     cert-manager.io/cluster-issuer: letsencrypt-prod
     traefik.ingress.kubernetes.io/router.middlewares: default-redirect-https@kubernetescrd
 spec:
+  ingressClassName: traefik
   rules:
     - host: weary.app
       http:
@@ -59,3 +59,4 @@ spec:
     - secretName: weary-backend-tls
       hosts:
         - weary.app
+
