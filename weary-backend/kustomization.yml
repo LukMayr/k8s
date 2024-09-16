@@ -5,3 +5,4 @@ namespace: weary-backend
 
 resources:
 - postgres-cluster.yml
+- weary-backend-deployment.yml

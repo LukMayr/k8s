@@ -1,0 +1,61 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: weary-backend-deployment
+  namespace: weary-backend
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: weary-backend
+  template:
+    metadata:
+      labels:
+        app: weary-backend
+    spec:
+      containers:
+        - name: weary-backend
+          image: ghcr.io/wearyclothing/weary-backend:latest
+          imagePullPolicy: Always
+        imagePullSecrets:
+          - dockerconfigjson-github-com
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: weary-backend-svc
+  namespace: weary-backend
+spec:
+  ports:
+    - port: 80
+      targetPort: 8080
+      protocol: TCP
+      name: http
+  selector:
+    app: weary-backend
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: weary-backend
+  namespace: weary-backend
+  annotations:
+    spec.ingressClassName: traefik
+    cert-manager.io/cluster-issuer: letsencrypt-prod
+    traefik.ingress.kubernetes.io/router.middlewares: default-redirect-https@kubernetescrd
+spec:
+  rules:
+    - host: weary.app
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: weary-backend
+                port:
+                  number: 8080
+  tls:
+    - secretName: weary-backend-tls
+      hosts:
+        - weary.app
