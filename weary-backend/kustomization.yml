@@ -4,4 +4,4 @@ kind: Kustomization
 namespace: weary-backend
 
 resources:
-- postgres-cluster.yaml
+- postgres-cluster.yml
