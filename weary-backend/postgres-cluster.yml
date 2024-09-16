@@ -1,7 +1,7 @@
 apiVersion: postgresql.cnpg.io/v1
 kind: Cluster
 metadata:
-  name: wakapi-postgres
+  name: weary-postgres
   namespace: weary-backend
 spec:
   instances: 2
