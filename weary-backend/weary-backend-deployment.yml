@@ -19,7 +19,7 @@ spec:
           imagePullPolicy: Always
           envFrom:
             secretRef:
-              name: weary-backend-secrete 
+              name: weary-backend-secrets 
       imagePullSecrets:
         - name: github-registry-secret
 
