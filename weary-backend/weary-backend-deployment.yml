@@ -18,7 +18,7 @@ spec:
           image: ghcr.io/wearyclothing/weary-backend:latest
           imagePullPolicy: Always
           envFrom:
-            secretRef:
+          - secretRef:
               name: weary-backend-secrets 
       imagePullSecrets:
         - name: github-registry-secret
