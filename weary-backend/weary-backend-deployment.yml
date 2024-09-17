@@ -29,11 +29,11 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: weary-backend-svc
+  name: weary-backend
   namespace: weary-backend
 spec:
   ports:
-    - port: 80
+    - port: 8080
       targetPort: 8080
       protocol: TCP
       name: http
@@ -54,7 +54,7 @@ spec:
     - host: weary.app
       http:
         paths:
-          - path: /
+          - path: /api/
             pathType: Prefix
             backend:
               service:
