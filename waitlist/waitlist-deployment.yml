@@ -1,0 +1,66 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: weary-waitlist-deployment
+  namespace: weary-backend
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: weary-waitlist
+  template:
+    metadata:
+      labels:
+        app: weary-waitlist
+    spec:
+      containers:
+        - name: weary-waitlist
+          image: ghcr.io/wearyclothing/waitlist:latest
+          imagePullPolicy: Always
+          envFrom:
+          - secretRef:
+              name: weary-backend-secrets
+      imagePullSecrets:
+        - name: github-registry-secret
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: weary-waitlist
+  namespace: weary-backend
+spec:
+  ports:
+    - port: 3000
+      targetPort: 3000
+      protocol: TCP
+      name: http
+  selector:
+    app: weary-waitlist
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: weary-waitlist
+  namespace: weary-backend
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt-prod
+    traefik.ingress.kubernetes.io/router.middlewares: default-redirect-https@kubernetescrd
+spec:
+  ingressClassName: traefik
+  rules:
+    - host: weary.app
+      http:
+        paths:
+          - path: /waitlist/
+            pathType: Prefix
+            backend:
+              service:
+                name: weary-waitlist
+                port:
+                  number: 8080
+  tls:
+    - secretName: weary-waitlist-tls
+      hosts:
+        - weary.app
+
