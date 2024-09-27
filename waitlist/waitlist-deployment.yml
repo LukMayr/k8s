@@ -49,18 +49,18 @@ metadata:
 spec:
   ingressClassName: traefik
   rules:
-    - host: weary.app
+    - host: waitlist.weary.app
       http:
         paths:
-          - path: /waitlist/
+          - path: /
             pathType: Prefix
             backend:
               service:
                 name: weary-waitlist
                 port:
-                  number: 8080
+                  number: 3000
   tls:
     - secretName: weary-waitlist-tls
       hosts:
-        - weary.app
+        - waitlist.weary.app
 
